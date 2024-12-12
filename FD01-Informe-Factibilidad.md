@@ -1,230 +1,269 @@
 <center>
 
-[comment]: <img src="./media/media/image1.png" style="width:1.088in;height:1.46256in" alt="escudo.png" />
 
-![./media/media/image1.png](./media/logo-upt.png)
+![Logo UPT](./media/logo-upt.png)
 
-**UNIVERSIDAD PRIVADA DE TACNA**
+**UNIVERSIDAD PRIVADA DE TACNA**  
+**FACULTAD DE INGENIERIA**  
+**Escuela Profesional de Ingeniería de Sistemas**  
 
-**FACULTAD DE INGENIERIA**
+**Proyecto: *Proyecto Prevalencia de Enfermedades en el Campus***  
 
-**Escuela Profesional de Ingeniería de Sistemas**
+Curso: *Inteligencia de Negocios*  
+Docente: Patrick Cuadros Quiroga  
 
-**Proyecto *{Nombre de Proyecto}***
+**Integrantes:**  
+***Meza Noalcca Jean Marco (2021071087)***  
+***Luna Juárez Juan Brendon (2020068762)***  
+***Elvis Mamani Valdivia (2020068763)***  
+***Cristian Quispe Levano (2018000590)***  
+***Angel Hernandez Cruz (2021000000)***  
 
-Curso: *{Nombre de Asignatura}*
+**Tacna – Perú**  
+**2024**
 
-Docente: *{Nombre de Docente}*
-
-Integrantes:
-
-***{Apellidos y nombres del estudiante (código universitario)}***
-
-**Tacna – Perú**
-
-***{Año}***
-
-**  
-**
 </center>
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
 
-Sistema *{Nombre del Sistema}*
+---
 
-Informe de Factibilidad
+## Sistema de Evaluación de la Incidencia de Enfermedades en el Entorno Estudiantil
 
-Versión *{1.0}*
+### Informe de Factibilidad
 
-|CONTROL DE VERSIONES||||||
-| :-: | :- | :- | :- | :- | :- |
-|Versión|Hecha por|Revisada por|Aprobada por|Fecha|Motivo|
-|1\.0|MPV|ELV|ARV|10/10/2020|Versión Original|
+**Versión: *1.0***
 
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
+| CONTROL DE VERSIONES  |     |     |     |     |
+|:---------------------:|:---:|:---:|:---:|:---:|
+| Versión              | Hecha por | Revisada por | Aprobada por | Fecha | Motivo |
+| 1.0                  | JBL    | ELV          | JMM        | 10/08/2024 | Versión Original |
+| 1.1                  | CLQ    | ELV          | JMM        | 25/08/2020 | Versión Original |
+| 1.2                  | EMV    | JMM          | JBL        | 10/09/2020 | Versión Original |
+| 1.3                  | JMM    | EMV          | CLQ        | 21/09/2020 | Versión Original |
 
-# **INDICE GENERAL**
+---
 
-[1. Descripción del Proyecto](#_Toc52661346)
+# Índice General
 
-[2. Riesgos](#_Toc52661347)
+1. [Descripción del Proyecto](#descripcion-del-proyecto)
+   - [1.1 Nombre del Proyecto](#nombre-del-proyecto)
+   - [1.2 Duración del Proyecto](#duracion-del-proyecto)
+   - [1.3 Descripción](#descripcion)
+   - [1.4 Objetivos](#objetivos)
+2. [Riesgos](#riesgos)
+3. [Análisis de la Situación Actual](#analisis-de-la-situacion-actual)
+   - [3.1 Planteamiento del Problema](#planteamiento-del-problema)
+   - [3.2 Consideraciones de Hardware y Software](#consideraciones-de-hardware-y-software)
+4. [Estudio de Factibilidad](#estudio-de-factibilidad)
+   - [4.1 Factibilidad Técnica](#factibilidad-tecnica)
+   - [4.2 Factibilidad Económica](#factibilidad-economica)
+   - [4.3 Factibilidad Operativa](#factibilidad-operativa)
+   - [4.4 Factibilidad Legal](#factibilidad-legal)
+   - [4.5 Factibilidad Social](#factibilidad-social)
+   - [4.6 Factibilidad Ambiental](#factibilidad-ambiental)
+5. [Análisis Financiero](#analisis-financiero)
+6. [Conclusiones](#conclusiones)
 
-[3. Análisis de la Situación actual](#_Toc52661348)
+---
 
-[4. Estudio de Factibilidad](#_Toc52661349)
+## Informe de Factibilidad
 
-[4.1 Factibilidad Técnica](#_Toc52661350)
+### 1. Descripción del Proyecto
 
-[4.2 Factibilidad económica](#_Toc52661351)
+#### 1.1 Nombre del Proyecto
+**Proyecto Prevalencia de Enfermedades en el Campus**
 
-[4.3 Factibilidad Operativa](#_Toc52661352)
+#### 1.2 Duración del Proyecto
+La duración del proyecto está planificada para 3 meses.
 
-[4.4 Factibilidad Legal](#_Toc52661353)
+#### 1.3 Descripción
+Este proyecto tiene como objetivo investigar cómo las enfermedades y dolencias han afectado a la salud y el bienestar general de los estudiantes universitarios en la Universidad Privada de Tacna. En el contexto universitario, donde los estudiantes enfrentan un entorno académico y social intensivo, es crucial entender cómo la prevalencia de estas enfermedades puede impactar su calidad de vida y rendimiento académico. 
 
-[4.5 Factibilidad Social](#_Toc52661354)
+El estudio analizará la relación entre la incidencia de dolencias y diversos factores, como la densidad en espacios comunes, la efectividad de las políticas de salud existentes ademas de tomar sus precauciones antes de iniciar cada semestre academico donde se analiza las dolencias comunes en cada semestre académico para hace sus prevenciones. La importancia radica en proporcionar datos basados en evidencia para desarrollar estrategias de prevención y mejorar la salud pública en el campus.
 
-[4.6 Factibilidad Ambiental](#_Toc52661355)
+#### 1.4 Objetivos
 
-[5. Análisis Financiero](#_Toc52661356)
+**Objetivo General**  
+Evaluar la salud y el acceso a los servicios de la Universidad Privada de Tacna, a través del análisis de la asistencia a tópicos, así como de indicadores de dolencias segun semestre academico, considerando variables como el género y la matriculación en diferentes semestres durante los años 2018, 2019, 2022 y 2023.
 
-[6. Conclusiones](#_Toc52661357)
+**Objetivos Específicos**  
+- *Cantidad de estudiantes que asistieron a tópicos por facultades en los años 2018, 2019, 2022 y 2023.
+- *Calcular el promedio de dolencias entre publico masculino o femenino.
+- *Calcular el promedio de dolencias previo inicio del semestre para evitar que continúen.
+- *Analizar de tendencias de Salud Fisica de los Estudiantes de la Upt.
+- *Evaluar el numero de enfermedades que son detectadas en un Año.
+- *Determinar el promedio de estudiantes matriculados en el segundo semestre de los años 2018, 2019, 2022 y 2023.
+- *Calcular el promedio de estudiantes matriculados por facultad en el primer semestre de los años 2018, 2019, 2022 y 2023.
 
+---
 
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
+### 2. Riesgos
+- **Baja tasa de participación**: Es posible que no todos los estudiantes participen en el estudio, lo que puede afectar la representatividad de los resultados.  
+- **Mitigación**: Promover el estudio a través de campañas de comunicación y ofrecer incentivos para aumentar la participación.
 
-**<u>Informe de Factibilidad</u>**
+- **Recopilación inexacta de datos**: La calidad de los datos puede verse afectada por errores en la recolección o la autoevaluación de los participantes.  
+- **Mitigación**: Utilizar métodos de recolección validados y realizar pruebas preliminares para asegurar la precisión y confiabilidad de los datos.
 
-1. <span id="_Toc52661346" class="anchor"></span>**Descripción del Proyecto**
+- **Factores externos que afectan la salud mental**: Eventos externos o cambios en el entorno pueden influir en los resultados del estudio.  
+- **Mitigación**: Controlar y registrar estos factores en el análisis para ajustar los resultados en consecuencia.
 
-    1.1. Nombre del proyecto
+- **Problemas éticos y de privacidad**: Asegurar la confidencialidad y el consentimiento informado de los participantes es crucial.  
+- **Mitigación**: Implementar protocolos rigurosos para proteger la privacidad de los participantes y cumplir con las normas éticas.
 
-    1.2. Duración del proyecto
+- **Limitaciones de recursos**: El financiamiento o los recursos disponibles podrían ser insuficientes para llevar a cabo el proyecto de manera óptima.  
+- **Mitigación**: Buscar financiamiento adicional, colaboraciones con otras instituciones o ajustes en el alcance del proyecto para adaptarse a los recursos disponibles.
 
-    1.3. Descripción
+---
 
-        En que consiste el proyecto/importancia del mismo, contexto en que se va desenvolver
+### 3. Análisis de la Situación Actual
 
-    1.4. Objetivos
+#### 3.1 Planteamiento del Problema
+La Universidad Privada de Tacna (UPT) enfrenta un creciente interés en mejorar la salud  y el bienestar de sus estudiantes. Se han implementado diversos programas de apoyo psicológico y bienestar, pero aún no se ha evaluado exhaustivamente el impacto en la salud mental de los estudiantes.
 
-        1.4.1 Objetivo general
-        1.4.2 Objetivos Específicos
-            Para cada objetivo específico se indicara que se va a lograr
+#### 3.2 Consideraciones de Hardware y Software
 
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
+**Hardware:**
+- **Computadoras o Laptops**:
+  
+| Especificación            | Requerimiento                      |
+|---------------------------|------------------------------------|
+| Procesador                | Intel Core i5 o superior           |
+| Memoria RAM               | Mínimo de 8 GB                     |
+| Almacenamiento            | SSD de al menos 256 GB            |
+| Pantalla                  | Resolución Full HD (1920x1080 píxeles) |
 
-2. <span id="_Toc52661347" class="anchor"></span>**Riesgos**
+**Software:**
+- **Power BI Desktop**: 
+  - Aplicación gratuita que permite el diseño, modelado y análisis de informes de datos. Compatible con Windows 10 o superior.
 
-    Señale los riesgos que pudieran afectar el éxito del proyecto.}*
+---
 
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
+### 4. Estudio de Factibilidad
+El estudio de factibilidad tiene como objetivo determinar si el análisis de la prevalencia de enfermedades comunes entre estudiantes es viable en términos de recursos técnicos, económicos y organizativos.
 
-3. <span id="_Toc52661348" class="anchor"></span>**Análisis de la Situación actual**
+#### 4.1 Factibilidad Técnica
+- **Hardware**:
+  - Equipos de computación adecuados en el campus.
+  - Servidores con capacidad suficiente para manejar grandes volúmenes de datos.
 
-    3.1. Planteamiento del problema
+- **Software**:
+  - Aplicaciones como SPSS o Power BI.
+  - Infraestructura de red sólida para acceder a bases de datos y sistemas de análisis.
 
-            Describa antecedentes y situación actual, explicando la problemática y/o necesidad que será resuelta con el proyecto propuesto.
+**Conclusión Técnica**: La tecnología actual en el campus es adecuada para realizar el análisis de la prevalencia de enfermedades.
 
-    3.2. Consideraciones de hardware y software
+#### 4.2 Factibilidad Económica
 
-            Hardware y software posibles para la implementación, se analizara lo que existe y es alcanzable, se evaluara que tecnología se puede > utilizar en el proyecto.
+**Costos del Proyecto:**
+| Concepto                    | Costo Estimado                   |
+|-----------------------------|----------------------------------|
+| Personal                    | $4,000.00                        |
+| Equipos y Software          | $2,000 - $5,000                 |
+| Materiales y Otros Recursos  | $1,000 - $2,000                 |
 
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
+**Beneficios Esperados:**
+- **Mejora en la Salud Estudiantil**: Identificación de tendencias que permitirá implementar intervenciones preventivas.
+- **Datos para Políticas**: Apoyará la toma de decisiones para mejorar las políticas de salud en el campus.
+- **Reconocimiento y Financiamiento**: Un estudio exitoso puede atraer financiamiento adicional.
 
-4. <span id="_Toc52661349" class="anchor"></span>**Estudio de
-    Factibilidad**
+**Conclusión Económica**: La inversión inicial está justificada por los beneficios esperados. El costo total del proyecto se estima entre **$13,000** y **$22,000**.
 
-    Describir los resultados que esperan alcanzar del estudio de factibilidad, las actividades que se realizaron para preparar la evaluación de factibilidad y por quien fue aprobado.
 
-    4.1. <span id="_Toc52661350" class="anchor"></span>Factibilidad Técnica
 
-        El estudio de viabilidad técnica se enfoca en obtener un entendimiento de los recursos tecnológicos disponibles actualmente y su aplicabilidad a las necesidades que se espera tenga el proyecto. En el caso de tecnología informática esto implica una evaluación del hardware y software y como este puede cubrir las necesidades del sistema propuesto.
 
-        Realizar una evaluación de la tecnología actual existente y la posibilidad de utilizarla en el desarrollo e implantación del sistema.*
+##### 4.2.1 Costos Generales
 
-        Describir acerca del hardware (equipos, servidor), software (aplicaciones, navegadores, sistemas operativos, dominio, internet, infraestructura de red física, etc.
+| Concepto                  | Monto         |
+|---------------------------|---------------|
+| Sueldo promedio           | S/ 2,800     |
+| PAGO INICIAL              | S/ 1,941.82  |
+| PAGO MENSUAL              | S/ 1,941.82  |
+| VALOR DE SALVAMENTO       | S/ 792.00    |
+| TIEMPO ESTIMADO           | 6 meses      |
+| TASA DE INTERÉS           | 7.8%         |
 
-    4.2. <span id="_Toc52661351" class="anchor"></span>Factibilidad Económica
+![Costos Generales](./media/costogeneral.jpg)
 
-        El propósito del estudio de viabilidad económica, es determinar los beneficios económicos del proyecto o sistema propuesto para la organización, en contraposición con los costos.
-        Como se mencionó anteriormente en el estudio de factibilidad técnica wvaluar si la institución (departamento de TI) cuenta con las herramientas necesarias para la implantación del sistema y evaluar si la propuesta requiere o no de una inversión inicial en infraestructura informática.
-        Se plantearán los costos del proyecto.
-        Costeo del Proyecto: Consiste en estimar los costos de los recursos Humanos, materiales o consumibles y/o máquinas) directos para completar las actividades del proyecto}.*
+---
 
-        Definir los siguientes costos:
+##### 4.2.2 Costos Operativos durante el Desarrollo
+Costos asociados con sueldos de programadores y diseñadores durante los 6 meses.
 
-        4.2.1. Costos Generales
+![Costos Operativos](./media/costooperativo.jpg)
 
-                Los costos generales son todos los gastos realizados en accesorios y material de oficina y de uso diario, necesarios para los procesos, tales como, papeles, plumas, cartuchos de impresora, marcadores, computadora etc. Colocar tabla de costos.
+---
 
-        4.2.2. Costos operativos durante el desarrollo 
-        
-                Evaluar costos necesarios para la operatividad de las actividades de la empresa durante el periodo en el que se realizara el proyecto. Los costos de operación pueden ser renta de oficina, agua, luz, teléfono, etc.
+##### 4.2.3 Costos del Ambiente
+Costos relacionados con el entorno de un centro de desarrollo de software
 
-        4.2.3. Costos del ambiente
+![Costos del Ambiente](./media/costoambiente.jpg)
 
-                Evaluar si se cuenta con los requerimientos técnicos para la implantación del software como el dominio, infraestructura de red, acceso a internet, etc.
+---
 
-        4.2.4. Costos de personal
+##### 4.2.4 Costos de Personal
+- Sueldo de un programador en 2024: **S/.9.00 por hora**.
 
-                Aquí se incluyen los gastos generados por el recurso humano que se necesita para el desarrollo del sistema únicamente.
+![Costos de Personal](./media/costopersonal.jpg)
 
-                No se considerará personal para la operación y funcionamiento del sistema.
+---
 
-                Incluir tabla que muestra los gastos correspondientes al personal.
+##### 4.2.5 Costos Totales del Desarrollo del Sistema
+Resumen de costos iniciales, operativos y de personal.
 
-                Indicar organización y roles. Indicar horario de trabajo del personal.
+![Costos Totales](./media/costototal.jpg)
 
-        4.2.5.  Costos totales del desarrollo del sistema
+---
 
-                {Totalizar costos y realizar resumen de costo final del proyecto y la forma de pago.
+#### 4.3 Factibilidad Operativa
+El proyecto tiene como objetivo mejorar la gestión de la información clínica y administrativa del policlínico.
 
-    4.3. <span id="_Toc52661352" class="anchor"></span>Factibilidad Operativa
+#### 4.4 Factibilidad Legal
+- **Cumplimiento de Normativas**: Asegurarse de que el sistema cumple con las leyes de protección de datos y regulaciones del sector salud.
 
-        Describir los beneficios del producto y si se tiene la capacidad por parte del cliente para mantener el sistema funcionando y garantizar el buen funcionamiento y su impacto en los usuarios. Lista de interesados.
+#### 4.5 Factibilidad Social
+- **Clima Político**: Verificar que no existan nuevas regulaciones que afecten el uso de tecnologías de datos.
 
-    4.4. <span id="_Toc52661353" class="anchor"></span>Factibilidad Legal
+#### 4.6 Factibilidad Ambiental
+- **Impacto Directo**: El sistema tiene un impacto ambiental mínimo. Se recomienda el uso de fuentes de energía renovable.
 
-        Determinar si existe conflicto del proyecto con restricciones legales como leyes y regulaciones del país o locales relacionadas con seguridad, protección de datos, conducta de negocio, empleo y adquisiciones.
+---
 
-    4.5. <span id="_Toc52661354" class="anchor"></span>Factibilidad Social 
+### 5. Análisis Financiero
+El análisis se ocupa de los ingresos y gastos asociados al proyecto.
 
-        Evaluar influencias y asuntos de índole social y cultural como el clima político, códigos de conducta y ética*
+#### 5.1 Justificación de la Inversión
 
-    4.6. <span id="_Toc52661355" class="anchor"></span>Factibilidad Ambiental
+##### 5.1.1 Beneficios del Proyecto
+- Mejora en la eficiencia del área bajo estudio.
+- Cumplimiento de requerimientos gubernamentales.
+- Toma acertada de decisiones.
 
-        Evaluar influencias y asuntos de índole ambiental como el impacto y repercusión en el medio ambiente.
+##### 5.1.2 Criterios de Inversión
+**Costos Totales del Proyecto:**
 
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
+![Valor Actual Neto](media/facti1.png)
 
-5. <span id="_Toc52661356" class="anchor"></span>**Análisis Financiero**
+**Flujo de Caja Neto durante el tiempo del Proyecto:**
 
-    El plan financiero se ocupa del análisis de ingresos y gastos asociados a cada proyecto, desde el punto de vista del instante temporal en que se producen. Su misión fundamental es detectar situaciones financieramente inadecuadas.
-    Se tiene que estimar financieramente el resultado del proyecto.
+![Flujo de Caja Neto](media/facti2.png)
 
-    5.1. Justificación de la Inversión
+###### 5.1.2.1 Relación Beneficio/Costo (B/C)
+El beneficio al ser 0.02 no aporta ningún beneficio inmediato, pero ayudará a prevenir futuras crisis.
 
-        5.1.1. Beneficios del Proyecto
+![Relación Beneficio/Costo](media/facti3.png)
 
-            El beneficio se calcula como el margen económico menos los costes de oportunidad, que son los márgenes que hubieran podido obtenerse de haber dedicado el capital y el esfuerzo a otras actividades.
-            El beneficio, obtenido lícitamente, no es sólo una recompensa a la inversión, al esfuerzo y al riesgo asumidos por el empresario, sino que también es un factor esencial para que las empresas sigan en el  mercado e incorporen nuevas inversiones al tejido industrial y social de las naciones.
-            Describir beneficios tangibles e intangibles*
-            Beneficios tangibles: son de fácil cuantificación, generalmente están relacionados con la reducción de recursos o talento humano.
-            Beneficios intangibles: no son fácilmente cuantificables y están relacionados con elementos o mejora en otros procesos de la organización.
->
-            Ejemplo de beneficios:
+###### 5.1.2.2 Valor Actual Neto (VAN)
+Gasto del Proyecto llevado a la actualidad.
 
-            - Mejoras en la eficiencia del área bajo estudio.
-            - Reducción de personal.
-            - Reducción de futuras inversiones y costos.
-            - Disponibilidad del recurso humano.
-            - Mejoras en planeación, control y uso de recursos.
-            - Suministro oportuno de insumos para las operaciones.
-            - Cumplimiento de requerimientos gubernamentales.
-            - Toma acertada de decisiones.
-            - Disponibilidad de información apropiada.
-            - Aumento en la confiabilidad de la información.
-            - Mejor servicio al cliente externo e interno
-            - Logro de ventajas competitivas.
-            - Valor agregado a un producto de la compañía.
-        
-        5.1.2. Criterios de Inversión
+![Valor Actual Neto](media/facti4.png)
 
-            5.1.2.1. Relación Beneficio/Costo (B/C)
+###### 5.1.2.3 Tasa Interna de Retorno (TIR)
+No existe TIR.
 
-                En base a los costos y beneficios identificados se evalúa si es factible el desarrollo del proyecto. 
-                Si se presentan varias alternativas de solución se evaluará cada una de ellas para determinar la mejor solución desde el punto de vista del > retorno de la inversión
-                El B/C si es mayor a uno, se acepta el proyecto; si el B/C es igual a uno es indiferente aceptar o rechazar el proyecto y si el B/C es menor a uno se rechaza el proyecto
+---
 
-            5.1.2.2. Valor Actual Neto (VAN)
-            
-                Valor actual de los beneficios netos que genera el proyecto. Si el VAN es mayor que cero, se acepta el proyecto; si el VAN es igual a cero es indiferente aceptar o rechazar el proyecto y si el VAN es menor que cero se rechaza el proyecto
+### 6. Conclusiones
+Los resultados del análisis de factibilidad indican que el proyecto es viable y factible.
 
-            5.1.2.3 Tasa Interna de Retorno (TIR)*
-                Es la tasa porcentual que indica la rentabilidad promedio anual que genera el capital invertido en el proyecto. Si la TIR es mayor que el costo de oportunidad se acepta el proyecto, si la TIR es igual al costo de oportunidad es indiferente aceptar o rechazar el proyecto, si la TIR es menor que el costo de oportunidad se rechaza el proyecto
+---
 
-                Costo de oportunidad de capital (COK) es la tasa de interés que podría haber obtenido con el dinero invertido en el proyecto
-
-<div style="page-break-after: always; visibility: hidden">\pagebreak</div>
-
-6. <span id="_Toc52661357" class="anchor"></span>**Conclusiones**
-
-Explicar los resultados del análisis de factibilidad que nos indican si el proyecto es viable y factible.
+**Referencias**  
