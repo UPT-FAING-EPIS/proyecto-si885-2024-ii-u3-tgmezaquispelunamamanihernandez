@@ -1,6 +1,6 @@
 ﻿Logo de Mi Empresa		Logo de mi Cliente
 
-![C:\Users\EPIS\Documents\upt.png](Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.001.png)
+![C:\Users\EPIS\Documents\upt.png](media/Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.001.png)
 
 **UNIVERSIDAD PRIVADA DE TACNA**
 
@@ -253,9 +253,9 @@ b) Cuadro de Requerimientos No Funcionales
 - **Estudiante:** Consulta información general y recibe alertas preventivas.
 #### <a name="_heading=h.3kk6ffhojp8d"></a>**2. Modelo Conceptual**
 ##### <a name="_heading=h.6bs79iy5eofy"></a>**a) Diagrama de Paquetes**
-![](Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.002.png)
+![](media/Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.002.png)
 ##### <a name="_heading=h.ljt4ul7a8e6b"></a>**b) Diagrama de Casos de Uso**
-![](Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.003.png)
+![](media/Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.003.png)
 ##### <a name="_heading=h.nw319jao754"></a>**c) Escenarios de Caso de Uso (Narrativa)**
 ### <a name="_heading=h.ygtvk49a4scx"></a>1. Análisis Comparativo
 Descripción:
@@ -325,13 +325,13 @@ Garantiza un seguimiento eficiente de las estrategias preventivas y contribuye a
 ##### <a name="_heading=h.e27mwq10azbn"></a>**a) Análisis de Objetos**
 Objetos principales: Reportes, Dolencias, Intervenciones, Usuarios.
 ##### <a name="_heading=h.wrz94z8zgrhs"></a>**b) Diagrama de Actividades con Objetos**
-![](Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.004.png)	
+![](media/Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.004.png)	
 
 ##### <a name="_heading=h.qdmyaveosaf4"></a>**c) Diagrama de Secuencia**
-![](Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.005.png)
+![](media/Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.005.png)
 ##### <a name="_heading=h.hf75ev23clfk"></a>**d) Diagrama de Clases**
 
-![](Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.006.png)
+![](media/Aspose.Words.e7a7d06f-a6c7-4ae8-8466-fd80d7e61a39.006.png)
 
 ### <a name="_heading=h.9u26im3e2ee3"></a>**Conclusiones**
 1. El sistema diseñado para la evaluación de la prevalencia de enfermedades en el campus universitario es **viable técnica, económica y operativamente**. Este permitirá a las autoridades tomar decisiones informadas basadas en datos concretos.
