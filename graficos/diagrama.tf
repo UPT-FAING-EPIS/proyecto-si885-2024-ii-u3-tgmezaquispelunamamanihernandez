@@ -1,183 +1,114 @@
-# Proveedor AWS
+# Proveedor AWS con el perfil 'cristian'
 provider "aws" {
-  region = var.region
+  profile = "cristian"
+  region  = var.region
 }
 
-# Variables necesarias
+# Definición de variables
 variable "region" {
   description = "Región de AWS para los recursos"
   default     = "us-east-1"
 }
 
-variable "project_name" {
-  description = "Nombre del proyecto"
-  default     = "data_analysis_project"
-}
-
-variable "lambda_runtime" {
-  description = "Runtime para las funciones Lambda"
-  default     = "python3.9"
-}
-
-# Bucket S3 para datos originales y procesados
+# Crear un Bucket S3 para almacenar los archivos CSV
 resource "aws_s3_bucket" "csv_bucket" {
-  bucket = "${replace(lower(var.project_name), "_", "-")}-csv-bucket"
-  tags = {
-    Project = var.project_name
+  bucket = "mi-bucket-csv"  # Asegúrate de que el nombre del bucket sea único
+}
+
+# Crear una base de datos en AWS Glue
+resource "aws_glue_catalog_database" "csv_database" {
+  name = "csv_database"
+}
+
+# Crear una tabla en Glue para los archivos CSV
+resource "aws_glue_catalog_table" "csv_table" {
+  name          = "csv_table"
+  database_name = aws_glue_catalog_database.csv_database.name
+
+  table_type = "EXTERNAL_TABLE"
+  parameters = {
+    "classification" = "csv"
   }
 
-  lifecycle {
-    prevent_destroy = true
+  storage_descriptor {
+    location      = "s3://${aws_s3_bucket.csv_bucket.id}/"  # Ruta del bucket
+    input_format  = "org.apache.hadoop.mapred.TextInputFormat"
+    output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+    compressed    = false
+
+    columns {
+      name = "ciclo"
+      type = "string"
+    }
+    columns {
+      name = "escuela"
+      type = "string"
+    }
+    columns {
+      name = "facultad"
+      type = "string"
+    }
+    columns {
+      name = "genero"
+      type = "string"
+    }
+    columns {
+      name = "peso"
+      type = "double"
+    }
+    columns {
+      name = "altura"
+      type = "double"
+    }
+    columns {
+      name = "intervencion"
+      type = "string"
+    }
+    columns {
+      name = "fecha"
+      type = "string"
+    }
+
+    ser_de_info {
+      serialization_library = "org.apache.hadoop.hive.serde2.OpenCSVSerde"
+      parameters = {
+        "separatorChar" = ","
+        "quoteChar"     = "\""
+      }
+    }
   }
 }
 
-# Bucket S3 para resultados de predicciones
-resource "aws_s3_bucket" "predictions_bucket" {
-  bucket = "${replace(lower(var.project_name), "_", "-")}-predictions-bucket"
-  tags = {
-    Project = var.project_name
+# Crear un Crawler de Glue para descubrir el esquema del archivo CSV
+resource "aws_glue_crawler" "csv_crawler" {
+  name            = "csv_crawler"
+  role            = aws_iam_role.glue_role.arn  # Role de IAM para Glue
+  database_name   = aws_glue_catalog_database.csv_database.name
+  s3_target {
+    path = "s3://${aws_s3_bucket.csv_bucket.id}/"  # Ruta del bucket de S3
   }
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  schedule = "cron(0 12 * * ? *)"  # Programar para que se ejecute diariamente
 }
 
-# Rol IAM para Lambda
-resource "aws_iam_role" "lambda_role" {
-  name               = "${var.project_name}_lambda_role"
+# Crear un role de IAM para Glue
+resource "aws_iam_role" "glue_role" {
+  name = "glue_role"
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [
-      {
-        Effect    = "Allow"
-        Action    = "sts:AssumeRole"
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
+    Statement = [ {
+      Action    = "sts:AssumeRole"
+      Effect    = "Allow"
+      Principal = {
+        Service = "glue.amazonaws.com"
       }
-    ]
+    } ]
   })
 }
 
-# Política IAM para Lambda
-resource "aws_iam_policy" "lambda_policy" {
-  name   = "${var.project_name}_lambda_policy"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      # Permisos para S3
-      {
-        Effect   = "Allow"
-        Action   = ["s3:GetObject", "s3:PutObject"]
-        Resource = [
-          "arn:aws:s3:::${aws_s3_bucket.csv_bucket.bucket}/*",
-          "arn:aws:s3:::${aws_s3_bucket.predictions_bucket.bucket}/*"
-        ]
-      },
-      # Permisos para logs
-      {
-        Effect   = "Allow"
-        Action   = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
-        Resource = "*"
-      }
-    ]
-  })
-}
-
-# Adjuntar la política al rol IAM
-resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
-  role       = aws_iam_role.lambda_role.name
-  policy_arn = aws_iam_policy.lambda_policy.arn
-}
-
-# Lambda para procesamiento inicial
-resource "aws_lambda_function" "csv_processor" {
-  function_name = "csv_processor"
-  runtime       = var.lambda_runtime
-  role          = aws_iam_role.lambda_role.arn
-  handler       = "lambda.lambda_handler"
-  filename      = "./csv_processor.zip"
-  source_code_hash = filebase64sha256("./csv_processor.zip")
-
-  environment {
-    variables = {
-      INPUT_BUCKET  = aws_s3_bucket.csv_bucket.bucket
-      OUTPUT_BUCKET = aws_s3_bucket.csv_bucket.bucket
-      OUTPUT_PATH   = "/processed/"
-    }
-  }
-}
-
-# Lambda para SafeMake (análisis de predicción)
-resource "aws_lambda_function" "safemake_analyzer" {
-  function_name = "safemake_analyzer"
-  runtime       = var.lambda_runtime
-  role          = aws_iam_role.lambda_role.arn
-  handler       = "safemake.lambda_handler"
-  filename      = "./safemake_analyzer.zip"
-  source_code_hash = filebase64sha256("./safemake_analyzer.zip")
-
-  environment {
-    variables = {
-      INPUT_BUCKET  = aws_s3_bucket.csv_bucket.bucket
-      OUTPUT_BUCKET = aws_s3_bucket.predictions_bucket.bucket
-      INPUT_PATH    = "/processed/"
-      OUTPUT_PATH   = "/predictions/"
-    }
-  }
-}
-
-# Integración con QuickSight (Gráfico para dashboards)
-resource "aws_quicksight_dataset" "quicq_dashboard" {
-  data_set_id    = "csv_analysis_dashboard"
-  aws_account_id = "your-account-id"
-
-  import_mode = "SPICE"
-
-  physical_table_map = {
-    "csvTable" = {
-      s3_source = {
-        input_columns = [
-          {
-            name = "column1"
-            type = "STRING"
-          },
-          {
-            name = "column2"
-            type = "STRING"
-          },
-          {
-            name = "prediction"
-            type = "STRING"
-          }
-        ]
-        data_source_arn = aws_s3_bucket.predictions_bucket.arn
-        upload_settings = {
-          format          = "CSV"
-          contains_header = true
-        }
-      }
-    }
-  }
-}
-
-# Outputs de los recursos
-output "s3_csv_bucket" {
-  description = "Bucket para los datos CSV originales"
-  value       = aws_s3_bucket.csv_bucket.bucket
-}
-
-output "s3_predictions_bucket" {
-  description = "Bucket para los resultados de predicciones"
-  value       = aws_s3_bucket.predictions_bucket.bucket
-}
-
-output "quicksight_dashboard_id" {
-  description = "ID del Dashboard en QuickSight"
-  value       = aws_quicksight_dataset.quicq_dashboard.data_set_id
+# Adjuntar políticas a Glue Role
+resource "aws_iam_role_policy_attachment" "glue_policy_attach" {
+  role       = aws_iam_role.glue_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
 }
