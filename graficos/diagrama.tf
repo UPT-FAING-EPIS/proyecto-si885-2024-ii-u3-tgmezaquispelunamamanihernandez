@@ -14,17 +14,12 @@ variable "project_name" {
   default     = "data_analysis_project"
 }
 
-variable "lambda_function_name" {
-  description = "Nombre de la función Lambda"
-  default     = "csv_processor"
-}
-
 variable "lambda_runtime" {
-  description = "Runtime para la función Lambda"
+  description = "Runtime para las funciones Lambda"
   default     = "python3.9"
 }
 
-# Crear un bucket S3
+# Bucket S3 para datos originales y procesados
 resource "aws_s3_bucket" "csv_bucket" {
   bucket = "${replace(lower(var.project_name), "_", "-")}-csv-bucket"
   tags = {
@@ -36,9 +31,21 @@ resource "aws_s3_bucket" "csv_bucket" {
   }
 }
 
+# Bucket S3 para resultados de predicciones
+resource "aws_s3_bucket" "predictions_bucket" {
+  bucket = "${replace(lower(var.project_name), "_", "-")}-predictions-bucket"
+  tags = {
+    Project = var.project_name
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 # Rol IAM para Lambda
 resource "aws_iam_role" "lambda_role" {
-  name               = "${var.lambda_function_name}_role"
+  name               = "${var.project_name}_lambda_role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -53,7 +60,7 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
-# Política IAM con permisos para S3, Athena, Glue y CloudWatch
+# Política IAM para Lambda
 resource "aws_iam_policy" "lambda_policy" {
   name   = "${var.project_name}_lambda_policy"
   policy = jsonencode({
@@ -62,24 +69,13 @@ resource "aws_iam_policy" "lambda_policy" {
       # Permisos para S3
       {
         Effect   = "Allow"
-        Action   = [
-          "s3:PutObject",
-          "s3:GetObject"
+        Action   = ["s3:GetObject", "s3:PutObject"]
+        Resource = [
+          "arn:aws:s3:::${aws_s3_bucket.csv_bucket.bucket}/*",
+          "arn:aws:s3:::${aws_s3_bucket.predictions_bucket.bucket}/*"
         ]
-        Resource = "arn:aws:s3:::${aws_s3_bucket.csv_bucket.bucket}/*"
       },
-      # Permisos para Athena y Glue
-      {
-        Effect   = "Allow"
-        Action   = [
-          "athena:StartQueryExecution",
-          "athena:GetQueryResults",
-          "glue:GetTable",
-          "glue:GetDatabase"
-        ]
-        Resource = "*"
-      },
-      # Permisos para CloudWatch
+      # Permisos para logs
       {
         Effect   = "Allow"
         Action   = [
@@ -93,50 +89,52 @@ resource "aws_iam_policy" "lambda_policy" {
   })
 }
 
-# Adjuntar la política al rol Lambda
+# Adjuntar la política al rol IAM
 resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_role.name
   policy_arn = aws_iam_policy.lambda_policy.arn
 }
 
-# Crear una función Lambda para procesamiento inicial
+# Lambda para procesamiento inicial
 resource "aws_lambda_function" "csv_processor" {
-  function_name = var.lambda_function_name
+  function_name = "csv_processor"
   runtime       = var.lambda_runtime
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda.lambda_handler"
-  filename      = "./lambda_code.zip"
-  source_code_hash = filebase64sha256("./lambda_code.zip")
+  filename      = "./csv_processor.zip"
+  source_code_hash = filebase64sha256("./csv_processor.zip")
 
   environment {
     variables = {
-      BUCKET_NAME = aws_s3_bucket.csv_bucket.bucket
-      OUTPUT_PATH = "/processed/"
+      INPUT_BUCKET  = aws_s3_bucket.csv_bucket.bucket
+      OUTPUT_BUCKET = aws_s3_bucket.csv_bucket.bucket
+      OUTPUT_PATH   = "/processed/"
     }
   }
 }
 
-# Función Lambda para análisis con SafeMake
+# Lambda para SafeMake (análisis de predicción)
 resource "aws_lambda_function" "safemake_analyzer" {
   function_name = "safemake_analyzer"
   runtime       = var.lambda_runtime
   role          = aws_iam_role.lambda_role.arn
   handler       = "safemake.lambda_handler"
-  filename      = "./safemake_code.zip"
-  source_code_hash = filebase64sha256("./safemake_code.zip")
+  filename      = "./safemake_analyzer.zip"
+  source_code_hash = filebase64sha256("./safemake_analyzer.zip")
 
   environment {
     variables = {
-      BUCKET_NAME = aws_s3_bucket.csv_bucket.bucket
-      INPUT_PATH  = "/processed/"
-      OUTPUT_PATH = "/predictions/"
+      INPUT_BUCKET  = aws_s3_bucket.csv_bucket.bucket
+      OUTPUT_BUCKET = aws_s3_bucket.predictions_bucket.bucket
+      INPUT_PATH    = "/processed/"
+      OUTPUT_PATH   = "/predictions/"
     }
   }
 }
 
-# Integrar con Quicq (Dashboard Generation)
+# Integración con QuickSight (Gráfico para dashboards)
 resource "aws_quicksight_dataset" "quicq_dashboard" {
-  data_set_id = "csv_analysis_dashboard"
+  data_set_id    = "csv_analysis_dashboard"
   aws_account_id = "your-account-id"
 
   import_mode = "SPICE"
@@ -152,9 +150,13 @@ resource "aws_quicksight_dataset" "quicq_dashboard" {
           {
             name = "column2"
             type = "STRING"
+          },
+          {
+            name = "prediction"
+            type = "STRING"
           }
         ]
-        data_source_arn = aws_s3_bucket.csv_bucket.arn
+        data_source_arn = aws_s3_bucket.predictions_bucket.arn
         upload_settings = {
           format          = "CSV"
           contains_header = true
@@ -164,23 +166,18 @@ resource "aws_quicksight_dataset" "quicq_dashboard" {
   }
 }
 
-# Crear outputs
-output "s3_bucket_name" {
-  description = "Nombre del bucket S3"
+# Outputs de los recursos
+output "s3_csv_bucket" {
+  description = "Bucket para los datos CSV originales"
   value       = aws_s3_bucket.csv_bucket.bucket
 }
 
-output "lambda_processor" {
-  description = "Lambda inicial para procesamiento"
-  value       = aws_lambda_function.csv_processor.function_name
+output "s3_predictions_bucket" {
+  description = "Bucket para los resultados de predicciones"
+  value       = aws_s3_bucket.predictions_bucket.bucket
 }
 
-output "safemake_analyzer" {
-  description = "Lambda para análisis con SafeMake"
-  value       = aws_lambda_function.safemake_analyzer.function_name
-}
-
-output "quicq_dashboard_id" {
-  description = "ID del Dashboard en Quicq"
+output "quicksight_dashboard_id" {
+  description = "ID del Dashboard en QuickSight"
   value       = aws_quicksight_dataset.quicq_dashboard.data_set_id
 }
