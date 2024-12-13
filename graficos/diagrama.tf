@@ -3,7 +3,7 @@ provider "aws" {
   region = var.region
 }
 
-# Definición de variables
+# Variables necesarias
 variable "region" {
   description = "Región de AWS para los recursos"
   default     = "us-east-1"
@@ -24,20 +24,19 @@ variable "lambda_runtime" {
   default     = "python3.9"
 }
 
-# Bucket S3 para almacenar archivos CSV procesados
+# Crear un bucket S3
 resource "aws_s3_bucket" "csv_bucket" {
   bucket = "${replace(lower(var.project_name), "_", "-")}-csv-bucket"
-  
   tags = {
     Project = var.project_name
   }
 
   lifecycle {
-    prevent_destroy = true  # Asegura que el bucket no sea destruido accidentalmente
+    prevent_destroy = true
   }
 }
 
-# Rol IAM para Lambda con permisos adecuados
+# Rol IAM para Lambda
 resource "aws_iam_role" "lambda_role" {
   name               = "${var.lambda_function_name}_role"
   assume_role_policy = jsonencode({
@@ -54,182 +53,134 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
-# Política IAM para Lambda (Permiso de acceso a S3, Athena y Glue)
-resource "aws_iam_policy" "lambda_s3_athena_glue_policy" {
-  name   = "${var.project_name}_lambda_s3_athena_glue_policy"
+# Política IAM con permisos para S3, Athena, Glue y CloudWatch
+resource "aws_iam_policy" "lambda_policy" {
+  name   = "${var.project_name}_lambda_policy"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      # Permisos para acceder a objetos en S3
+      # Permisos para S3
       {
         Effect   = "Allow"
-        Action   = "s3:PutObject"
+        Action   = [
+          "s3:PutObject",
+          "s3:GetObject"
+        ]
         Resource = "arn:aws:s3:::${aws_s3_bucket.csv_bucket.bucket}/*"
       },
-      {
-        Effect   = "Allow"
-        Action   = "s3:GetObject"
-        Resource = "arn:aws:s3:::${aws_s3_bucket.csv_bucket.bucket}/*"
-      },
-      # Permisos para ejecutar consultas en Athena
+      # Permisos para Athena y Glue
       {
         Effect   = "Allow"
         Action   = [
           "athena:StartQueryExecution",
           "athena:GetQueryResults",
-          "athena:ListTableMetadata"
+          "glue:GetTable",
+          "glue:GetDatabase"
         ]
         Resource = "*"
       },
-      # Permisos para interactuar con Glue
+      # Permisos para CloudWatch
       {
         Effect   = "Allow"
         Action   = [
-          "glue:GetTable",
-          "glue:GetDatabase",
-          "glue:BatchGetTable"
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
         ]
         Resource = "*"
-      },
-      # Permiso para asumir el rol
-      {
-        Effect   = "Allow"
-        Action   = "iam:PassRole"
-        Resource = aws_iam_role.lambda_role.arn
       }
     ]
   })
 }
 
-# Adjuntar la política de S3, Athena y Glue al rol de Lambda
-resource "aws_iam_role_policy_attachment" "lambda_s3_athena_glue_attachment" {
+# Adjuntar la política al rol Lambda
+resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_role.name
-  policy_arn = aws_iam_policy.lambda_s3_athena_glue_policy.arn
+  policy_arn = aws_iam_policy.lambda_policy.arn
 }
 
-# Función Lambda que procesará el archivo CSV
-resource "aws_lambda_function" "csv_processor_lambda" {
+# Crear una función Lambda para procesamiento inicial
+resource "aws_lambda_function" "csv_processor" {
   function_name = var.lambda_function_name
+  runtime       = var.lambda_runtime
   role          = aws_iam_role.lambda_role.arn
   handler       = "lambda.lambda_handler"
-  runtime       = var.lambda_runtime
-
-  # Ruta del archivo ZIP que contiene el código de la función Lambda
-  filename      = "./lambda_code.zip"  # Asegúrate de que el archivo ZIP se haya generado previamente
+  filename      = "./lambda_code.zip"
   source_code_hash = filebase64sha256("./lambda_code.zip")
 
   environment {
     variables = {
-      BUCKET_NAME = aws_s3_bucket.csv_bucket.bucket  # Configuración del nombre del bucket S3
-    }
-  }
-
-  tags = {
-    Project = var.project_name
-  }
-}
-
-# AWS Glue: Crea un catálogo de base de datos para los archivos CSV
-resource "aws_glue_catalog_database" "csv_database" {
-  name = "${var.project_name}_csv_database"
-}
-
-# AWS Glue: Crea una tabla para los archivos CSV en el catálogo de Glue
-resource "aws_glue_catalog_table" "csv_table" {
-  name          = "csv_data"
-  database_name = aws_glue_catalog_database.csv_database.name
-
-  table_type = "EXTERNAL_TABLE"
-  storage_descriptor {
-    location      = "s3://${aws_s3_bucket.csv_bucket.bucket}/"
-    input_format  = "org.apache.hadoop.mapred.TextInputFormat"
-    output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
-    columns {
-      name = "column1"
-      type = "string"
-    }
-    columns {
-      name = "column2"
-      type = "string"
+      BUCKET_NAME = aws_s3_bucket.csv_bucket.bucket
+      OUTPUT_PATH = "/processed/"
     }
   }
 }
 
-# AWS Glue: Crea un Crawler para procesar los archivos CSV en el bucket S3
-resource "aws_glue_crawler" "csv_crawler" {
-  name          = "csv-crawler"
-  role          = aws_iam_role.glue_role.arn
-  database_name = aws_glue_catalog_database.csv_database.name
-  s3_target {
-    path = "s3://${aws_s3_bucket.csv_bucket.bucket}/"
+# Función Lambda para análisis con SafeMake
+resource "aws_lambda_function" "safemake_analyzer" {
+  function_name = "safemake_analyzer"
+  runtime       = var.lambda_runtime
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "safemake.lambda_handler"
+  filename      = "./safemake_code.zip"
+  source_code_hash = filebase64sha256("./safemake_code.zip")
+
+  environment {
+    variables = {
+      BUCKET_NAME = aws_s3_bucket.csv_bucket.bucket
+      INPUT_PATH  = "/processed/"
+      OUTPUT_PATH = "/predictions/"
+    }
   }
-
-  classifiers = []  # Glue detecta el tipo de archivo automáticamente sin necesidad de clasificadores
-
-  table_prefix = "csv_"  # Prefijo para las tablas que se crean
 }
 
-# AWS Athena: Crear una base de datos en Athena (usando Glue como origen de datos)
-resource "aws_athena_database" "csv_athena_database" {
-  name   = "${var.project_name}_athena_db"
-  bucket = aws_s3_bucket.csv_bucket.bucket
+# Integrar con Quicq (Dashboard Generation)
+resource "aws_quicksight_dataset" "quicq_dashboard" {
+  data_set_id = "csv_analysis_dashboard"
+  aws_account_id = "your-account-id"
+
+  import_mode = "SPICE"
+
+  physical_table_map = {
+    "csvTable" = {
+      s3_source = {
+        input_columns = [
+          {
+            name = "column1"
+            type = "STRING"
+          },
+          {
+            name = "column2"
+            type = "STRING"
+          }
+        ]
+        data_source_arn = aws_s3_bucket.csv_bucket.arn
+        upload_settings = {
+          format          = "CSV"
+          contains_header = true
+        }
+      }
+    }
+  }
 }
 
-# Salidas (outputs) de la configuración de recursos
+# Crear outputs
 output "s3_bucket_name" {
   description = "Nombre del bucket S3"
   value       = aws_s3_bucket.csv_bucket.bucket
 }
 
-output "lambda_function_name" {
-  description = "Nombre de la función Lambda"
-  value       = aws_lambda_function.csv_processor_lambda.function_name
+output "lambda_processor" {
+  description = "Lambda inicial para procesamiento"
+  value       = aws_lambda_function.csv_processor.function_name
 }
 
-output "athena_database_name" {
-  description = "Nombre de la base de datos de Athena"
-  value       = aws_athena_database.csv_athena_database.name
+output "safemake_analyzer" {
+  description = "Lambda para análisis con SafeMake"
+  value       = aws_lambda_function.safemake_analyzer.function_name
 }
 
-output "athena_table_name" {
-  description = "Nombre de la tabla de Athena"
-  value       = aws_glue_catalog_table.csv_table.name
+output "quicq_dashboard_id" {
+  description = "ID del Dashboard en Quicq"
+  value       = aws_quicksight_dataset.quicq_dashboard.data_set_id
 }
-
-# Grupo de logs de CloudWatch para Lambda
-resource "aws_cloudwatch_log_group" "lambda_logs" {
-  name              = "/aws/lambda/${var.lambda_function_name}"
-  retention_in_days = 14
-}
-
-# Política IAM para logs de CloudWatch
-resource "aws_iam_policy" "lambda_logging_policy" {
-  name   = "${var.project_name}_lambda_logging_policy"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect   = "Allow"
-        Action   = "logs:CreateLogGroup"
-        Resource = "arn:aws:logs:${var.region}:*:*"
-      },
-      {
-        Effect   = "Allow"
-        Action   = "logs:CreateLogStream"
-        Resource = "arn:aws:logs:${var.region}:*:*"
-      },
-      {
-        Effect   = "Allow"
-        Action   = "logs:PutLogEvents"
-        Resource = "arn:aws:logs:${var.region}:*:*"
-      }
-    ]
-  })
-}
-
-# Adjuntar la política de logs al rol de Lambda
-resource "aws_iam_role_policy_attachment" "lambda_logging_attachment" {
-  role       = aws_iam_role.lambda_role.name
-  policy_arn = aws_iam_policy.lambda_logging_policy.arn
-}
-
