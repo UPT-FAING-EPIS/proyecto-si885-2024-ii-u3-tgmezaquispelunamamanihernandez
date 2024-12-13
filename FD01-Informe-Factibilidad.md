@@ -86,7 +86,7 @@ El estudio analizará la relación entre la incidencia de dolencias y diversos f
 Evaluar la salud y el acceso a los servicios de la Universidad Privada de Tacna, a través del análisis de la asistencia a tópicos, así como de indicadores de dolencias segun semestre academico, considerando variables como el género y la matriculación en diferentes semestres durante los años 2018, 2019, 2022 y 2023.
 
 **Objetivos Específicos**  
-- *Cantidad de estudiantes que asistieron a tópicos por facultades en los años 2018, 2019, 2022 y 2023.
+- *Calcular de estudiantes que asistieron a tópicos por facultades en los años 2018, 2019, 2022 y 2023.
 - *Calcular el promedio de dolencias entre publico masculino o femenino.
 - *Calcular el promedio de dolencias previo inicio del semestre para evitar que continúen.
 - *Analizar de tendencias de Salud Fisica de los Estudiantes de la Upt.
